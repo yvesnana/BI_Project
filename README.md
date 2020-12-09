@@ -1,4 +1,4 @@
-# Binformatics Project 
+# Bio Info R Matics Project 
 
 # Team: 
 * Miss Fabulous Cate
