@@ -1,6 +1,6 @@
-# Bio Info R Matics Project 
+# Bio Info R Matics - Pro Je(c)t 
 
-# Team: 
+# Tea M: 
 * Miss Fabulous Cate
 * Mister Beautiful Hair Dario
 * Mister Chocolate Yves
