@@ -1,0 +1,108 @@
+---
+title: "1.1"
+output: html_notebook
+---
+
+
+# Load Library
+```{r}
+library(biomaRt)
+```
+
+
+# Download the dataset fron DisGeNet
+```{r}
+dataset <- read.delim("~/Downloads/curated_gene_disease_associations.tsv")
+```
+
+```{r}
+our_disease = "C0422854"
+dataset <- dataset[dataset$diseaseId == our_disease, ]
+```
+
+# From BiomaRt retreive all info needed for 1.1.b
+
+```{r}
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+```
+
+```{r}
+filters = listFilters(mart)
+filters
+```
+
+```{r}
+attributes = listAttributes(mart)
+attributes
+```
+
+
+```{r}
+gene_list <- dataset$geneSymbol
+test1 <- getBM(attributes=c("hgnc_symbol", "uniprot_gn_id"), 
+      filters = 'hgnc_symbol', 
+      values = gene_list, 
+       bmHeader = T,
+      mart = mart)
+
+test1 <- test1[!duplicated(test1$`UniProtKB Gene Name ID`), ]
+
+
+test3 <- getBM(attributes=c("hgnc_symbol", "uniprot_gn_id", "interpro_short_description"), 
+      filters = 'uniprot_gn_id', 
+      values = test1$`UniProtKB Gene Name ID`, 
+       bmHeader = T,
+      mart = mart)
+
+test3 <- test3[!duplicated(test3$`UniProtKB Gene Name ID`), ]
+
+
+test1 <- test1[order(test1$`UniProtKB Gene Name ID`), ]
+test3 <- test3[order(test1$`UniProtKB Gene Name ID`), ]
+
+final <- merge(x = test1, y = test3, by = "UniProtKB Gene Name ID")
+final$`HGNC symbol.y` <- NULL 
+
+colnames(final) <- c("Uniprot AC", "Gene Symbol", "Protein Name")
+
+
+
+test2 <- getBM(attributes=c('hgnc_symbol','entrezgene_id', "description"), 
+      filters = 'hgnc_symbol', 
+      values = gene_list, 
+       bmHeader = T,
+      mart = mart)
+
+
+test2 <- test2[complete.cases(test2),]
+
+
+test2$`Gene description` <-  gsub("\\[[^\\]]*\\]", "", test2$`Gene description`, perl=TRUE)
+
+colnames(test2) <- c("Gene Symbol", "Entrez Gene ID", "Short Description")
+
+```
+
+## Cleaning of our data
+
+
+```{r}
+final_df <- merge(x = final, y = test2, by = "Gene Symbol")
+```
+
+## remove duplicated symbols
+```{r}
+final_df <- read.csv("Initial_Gene_Dataset.csv")
+final_df$X <- NULL
+```
+
+```{r}
+final_df <- final_df[!duplicated(final_df$Gene.Symbol),]
+```
+
+
+# Save
+```{r}
+write.csv(final_df, "Initial_Gene_Dataset.csv")
+```
+

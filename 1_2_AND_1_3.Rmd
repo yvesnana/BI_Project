@@ -1,0 +1,100 @@
+---
+title: "1.2 & 1.3"
+output: html_notebook
+---
+
+# Open clean dataset
+```{r}
+data <- read.csv("~/Desktop/Data_Science/second_year/BI/Project/Initial_Gene_Dataset.csv")
+data$X <- NULL
+```
+
+
+# Get all genes
+```{r}
+gene_list <- data$Gene.Symbol
+
+gene_list <- gene_list[!duplicated(gene_list)]
+```
+
+```{r}
+df <- read.delim("~/Desktop/Data_Science/second_year/BI/Project/BIOGRID-ORGANISM-Homo_sapiens-4.2.192.tab.txt", header = TRUE, sep = "\t", dec = ".")
+```
+
+```{r}
+clean_df <- df[df$ORGANISM_A_ID == "9606" & df$ORGANISM_B_ID == "9606", c("OFFICIAL_SYMBOL_A", "OFFICIAL_SYMBOL_B")]
+```
+
+## remove duplicates
+```{r}
+clean_df <- clean_df[!duplicated(clean_df),]
+```
+
+```{r}
+clean_df <- clean_df[clean_df$OFFICIAL_SYMBOL_A != clean_df$OFFICIAL_SYMBOL_B, ]
+```
+
+
+```{r}
+with_seeds <- clean_df[clean_df$OFFICIAL_SYMBOL_A %in% gene_list | clean_df$OFFICIAL_SYMBOL_B %in% gene_list,]
+```
+
+## retreive seconds
+```{r}
+genes_interct_seed <- c(with_seeds$OFFICIAL_SYMBOL_A, with_seeds$OFFICIAL_SYMBOL_B)
+```
+
+```{r}
+genes_interct_seed <- genes_interct_seed[!duplicated(genes_interct_seed)]
+```
+
+```{r}
+seconds <- setdiff(genes_interct_seed, gene_list)
+```
+## get interaction between seconds
+```{r}
+with_seconds <- clean_df[clean_df$OFFICIAL_SYMBOL_A %in% seconds & clean_df$OFFICIAL_SYMBOL_B %in% seconds,]
+```
+
+```{r}
+all_interect <- rbind(with_seeds, with_seconds)
+```
+
+# Save
+```{r}
+write.csv(with_seeds, "with_seeds")
+write.csv(with_seconds, "with_seconds")
+write.csv(all_interect, "all_interact")
+```
+
+
+# 1_3
+```{r}
+seed_seed <- with_seeds[with_seeds$OFFICIAL_SYMBOL_A %in% gene_list & with_seeds$OFFICIAL_SYMBOL_B %in% gene_list,  ]
+```
+
+```{r}
+uniprot_A <- c(rep(NA, nrow(seed_seed)))
+for(i in 1:nrow(seed_seed)){
+  pos = which(final_df$Gene.Symbol == seed_seed$OFFICIAL_SYMBOL_A[i])
+  uniprot_A[i] <- final_df$Uniprot.AC[pos]
+}
+
+uniprot_B <- c(rep(NA, nrow(seed_seed)))
+for(i in 1:nrow(seed_seed)){
+  pos = which(final_df$Gene.Symbol == seed_seed$OFFICIAL_SYMBOL_B[i])
+  uniprot_B[i] <- final_df$Uniprot.AC[pos]
+}
+```
+
+```{r}
+seed_seed$Uniprot_A <- uniprot_A 
+seed_seed$Uniprot_B <- uniprot_B 
+
+colnames(seed_seed) <- c("interactor A gene symbol", "interactor B gene symbol", "interactor A Uniprot AC", "interactor B Uniprot AC")
+
+```
+
+
+
+
