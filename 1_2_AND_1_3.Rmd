@@ -5,7 +5,7 @@ output: html_notebook
 
 # Open clean dataset
 ```{r}
-data <- read.csv("~/Desktop/Data_Science/second_year/BI/Project/Initial_Gene_Dataset.csv")
+data <- read.csv("Initial_Gene_Dataset.csv")
 data$X <- NULL
 ```
 
@@ -18,7 +18,7 @@ gene_list <- gene_list[!duplicated(gene_list)]
 ```
 
 ```{r}
-df <- read.delim("~/Desktop/Data_Science/second_year/BI/Project/BIOGRID-ORGANISM-Homo_sapiens-4.2.192.tab.txt", header = TRUE, sep = "\t", dec = ".")
+df <- read.delim("BIOGRID-ORGANISM-Homo_sapiens-4.2.192.tab.txt", header = TRUE, sep = "\t", dec = ".")
 ```
 
 ```{r}
@@ -76,14 +76,14 @@ seed_seed <- with_seeds[with_seeds$OFFICIAL_SYMBOL_A %in% gene_list & with_seeds
 ```{r}
 uniprot_A <- c(rep(NA, nrow(seed_seed)))
 for(i in 1:nrow(seed_seed)){
-  pos = which(final_df$Gene.Symbol == seed_seed$OFFICIAL_SYMBOL_A[i])
-  uniprot_A[i] <- final_df$Uniprot.AC[pos]
+  pos = which(data$Gene.Symbol == seed_seed$OFFICIAL_SYMBOL_A[i])
+  uniprot_A[i] <- data$Uniprot.AC[pos]
 }
 
 uniprot_B <- c(rep(NA, nrow(seed_seed)))
 for(i in 1:nrow(seed_seed)){
-  pos = which(final_df$Gene.Symbol == seed_seed$OFFICIAL_SYMBOL_B[i])
-  uniprot_B[i] <- final_df$Uniprot.AC[pos]
+  pos = which(data$Gene.Symbol == seed_seed$OFFICIAL_SYMBOL_B[i])
+  uniprot_B[i] <- data$Uniprot.AC[pos]
 }
 ```
 
@@ -96,5 +96,87 @@ colnames(seed_seed) <- c("interactor A gene symbol", "interactor B gene symbol",
 ```
 
 
+# all proteins interacting with at least one seed gene, same format as above
+```{r}
+seconds_with_seeds <- with_seeds[!(with_seeds$OFFICIAL_SYMBOL_A %in% gene_list & with_seeds$OFFICIAL_SYMBOL_B %in% gene_list),]
+```
+
+```{r}
+library(biomaRt)
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+```
+
+```{r}
+uniA <- getBM(attributes=c('hgnc_symbol', "uniprot_gn_id"), 
+      filters = 'hgnc_symbol', 
+      values = unique(seconds_with_seeds$OFFICIAL_SYMBOL_A), 
+      bmHeader = T,
+      mart = mart)
+
+```
+
+#for each gene we have many AC possible, so we choose the first
+```{r}
+uniA = uniA[!duplicated(uniA$`HGNC symbol`),]
+colnames(uniA)
+colnames(uniA) <- c("OFFICIAL_SYMBOL_A", "Interactor A Uniprot AC")
+```
+
+#the corresponding uniprot AC are returned in alphabetical order, so we sort our dataframe to better check that everything is working fine
+
+```{r}
+seconds_with_seeds <- seconds_with_seeds[order(seconds_with_seeds$OFFICIAL_SYMBOL_A),]
+```
+#Now we join the to tables to attach the AC information 
+
+```{r}
+disease_interactome1 <- merge(x = seconds_with_seeds, y = uniA, by = "OFFICIAL_SYMBOL_A", all=TRUE) #outer join to avoid losing values
+```
+#Please note that for not all genes a Uniprot AC was found, so the final table will have some Nans (46 are missing)
+
+```{r}
+length(unique(seconds_with_seeds$OFFICIAL_SYMBOL_A))
+dim(uniA)
+any(is.na(disease_interactome1$'Interactor A Uniprot AC'))
+```
+
+#Now we do the same for the B column
+```{r}
+uniB <- getBM(attributes=c('hgnc_symbol', "uniprot_gn_id"), 
+      filters = 'hgnc_symbol', 
+      values = unique(seconds_with_seeds$OFFICIAL_SYMBOL_B), 
+      bmHeader = T,
+      mart = mart)
+
+uniB = uniB[!duplicated(uniB$`HGNC symbol`),]
+colnames(uniB) <- c("OFFICIAL_SYMBOL_B", "Interactor B Uniprot AC")
+```
+
+```{r}
+seconds_with_seeds <- seconds_with_seeds[order(seconds_with_seeds$OFFICIAL_SYMBOL_B),]
+```
+
+```{r}
+disease_interactome <- merge(x = disease_interactome1, y = uniB, by = "OFFICIAL_SYMBOL_B", all=TRUE) #outer join to avoid losing values
+```
+
+# Here we have the same issues but for more values
+```{r}
+length(unique(seconds_with_seeds$OFFICIAL_SYMBOL_B))
+dim(uniB)
+any(is.na(disease_interactome$'Interactor B Uniprot AC'))
+```
+# Let's reorder the columns and reorder the rows
+```{r}
+disease_interactome <- disease_interactome[,c(2,1,3,4)]
+```
+
+```{r}
+disease_interactome <- disease_interactome[with(disease_interactome, order(OFFICIAL_SYMBOL_A, OFFICIAL_SYMBOL_B)), ]
+```
+
+```{r}
+write.csv(disease_interactome, "disease_interactome.csv")
+```
 
 
