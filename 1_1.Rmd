@@ -92,8 +92,7 @@ final_df <- merge(x = final, y = test2, by = "Gene Symbol")
 
 ## remove duplicated symbols
 ```{r}
-final_df <- read.csv("Initial_Gene_Dataset.csv")
-final_df$X <- NULL
+final_df <- read.csv("Initial_Gene_Dataset.csv", header = TRUE, row.names = 1)
 ```
 
 ```{r}

@@ -5,8 +5,7 @@ output: html_notebook
 
 # Open clean dataset
 ```{r}
-data <- read.csv("Initial_Gene_Dataset.csv")
-data$X <- NULL
+data <- read.csv("Initial_Gene_Dataset.csv", header = TRUE, row.names = 1)
 ```
 
 
