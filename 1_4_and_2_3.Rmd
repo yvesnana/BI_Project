@@ -1,0 +1,77 @@
+---
+title: "Enrichment analysis"
+output: html_notebook
+---
+
+```{r}
+rm(list=ls())
+disease_interactome <- read.csv("disease_interactome.csv", header = TRUE, row.names = 1)
+```
+
+```{r}
+library(enrichR)
+dbs <- listEnrichrDbs()
+dbs <- c("GO_Molecular_Function_2018", "GO_Cellular_Component_2018", "GO_Biological_Process_2018" ,"KEGG_2019_Human")
+
+
+set_A <- disease_interactome$OFFICIAL_SYMBOL_A
+set_B <- disease_interactome$OFFICIAL_SYMBOL_B
+
+A_B <- c(set_A, set_B)
+
+uniq <- A_B[!duplicated(A_B)]
+
+enriched <- enrichr(uniq, dbs)
+
+interested_ones <- lapply(enriched,head,n=10)
+
+#printEnrich(interested_ones , "enrichment_analysis.txt" , sep = "\t", columns = c(1:8))
+
+BP <- enriched[["GO_Biological_Process_2018"]][1:10,]
+MF <- enriched[["GO_Molecular_Function_2018"]][1:10,]
+CC <- enriched[["GO_Cellular_Component_2018"]][1:10,]
+KEGG <- enriched[["KEGG_2019_Human"]][1:10,]
+
+```
+
+
+# EXERCISE:  2.3
+
+### get interested genes
+```{r}
+putative_disease <- read.csv("putative_disease_modules (2).csv", header = TRUE, row.names = 1)
+```
+
+
+### adjust the format
+```{r}
+genes <- c()
+for (i in 1:nrow(putative_disease)){
+  clean =  noquote(unlist(strsplit(putative_disease$GeneNames[i][1], "[{}]"))[2])
+  clean_2 = unlist(strsplit(clean, "[,]"))
+  for (j in clean_2){
+    genes <- c(genes , unlist(strsplit(noquote(j), "[']"))[2])
+  }
+}
+
+```
+
+
+### remove duplicates
+```{r}
+genes <- genes[!duplicated(genes)]
+```
+
+### Enrichment analysis 
+```{r}
+enriched <- enrichr(genes, dbs)
+
+interested_ones <- lapply(enriched,head,n=10)
+
+printEnrich(interested_ones , "enrichment_analysis_2_3.txt" , sep = "\t", columns = c(1:8))
+
+BP_2_3 <- enriched[["GO_Biological_Process_2018"]][1:10,]
+MF_2_3 <- enriched[["GO_Molecular_Function_2018"]][1:10,]
+CC_2_3 <- enriched[["GO_Cellular_Component_2018"]][1:10,]
+KEGG_2_3<- enriched[["KEGG_2019_Human"]][1:10,]
+```

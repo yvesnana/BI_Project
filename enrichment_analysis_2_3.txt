@@ -1,0 +1,52 @@
+GO_Molecular_Function_2018
+inward rectifier potassium channel activity (GO:0005242)	4/21	1.604287e-05	0.01846535	0	0	25.567274	282.26899
+nitric-oxide synthase binding (GO:0050998)	3/11	6.399551e-05	0.03682941	0	0	36.607688	353.50937
+exopeptidase activity (GO:0008238)	4/45	3.476304e-04	0.13337421	0	0	11.931394	 95.02605
+zinc ion binding (GO:0008270)	9/302	4.464447e-04	0.12846446	0	0	 4.000178	 30.85815
+phosphoserine residue binding (GO:0050815)	2/6	8.108934e-04	0.18666765	0	0	44.742729	318.45074
+calcium:sodium antiporter activity (GO:0005432)	2/6	8.108934e-04	0.15555638	0	0	44.742729	318.45074
+voltage-gated potassium channel activity involved in ventricular cardiac muscle cell action potential repolarization (GO:1902282)	2/8	1.498913e-03	0.24646409	0	0	33.557047	218.22199
+neurotrophin TRK receptor binding (GO:0005167)	2/8	1.498913e-03	0.21565608	0	0	33.557047	218.22199
+neurotrophin binding (GO:0043121)	2/9	1.917765e-03	0.24526085	0	0	29.828486	186.62475
+dipeptidase activity (GO:0016805)	2/10	2.385510e-03	0.27457215	0	0	26.845638	162.10315
+
+
+GO_Cellular_Component_2018
+integral component of plasma membrane (GO:0005887)	32/1463	2.671647e-08	1.191555e-05	0	0	 2.935955	 51.19714
+membrane raft (GO:0045121)	6/119	2.685926e-04	5.989615e-02	0	0	 6.767808	 55.64705
+perinuclear region of cytoplasm (GO:0048471)	10/378	5.505478e-04	8.184810e-02	0	0	 3.551010	 26.64890
+cytoplasmic vesicle membrane (GO:0030659)	4/54	7.005745e-04	7.811406e-02	0	0	 9.942829	 72.22083
+shelterin complex (GO:0070187)	2/7	1.129703e-03	1.007695e-01	0	0	38.350911	260.24164
+lysosomal membrane (GO:0005765)	8/291	1.549282e-03	1.151633e-01	0	0	 3.690122	 23.87495
+nuclear telomere cap complex (GO:0000783)	2/13	4.074718e-03	2.596178e-01	0	0	20.650490	113.63869
+potassium channel complex (GO:0034705)	2/14	4.730694e-03	2.637362e-01	0	0	19.175455	102.65932
+dystrophin-associated glycoprotein complex (GO:0016010)	2/14	4.730694e-03	2.344322e-01	0	0	19.175455	102.65932
+COPI vesicle coat (GO:0030126)	2/15	5.431934e-03	2.422643e-01	0	0	17.897092	 93.34157
+
+
+GO_Biological_Process_2018
+regulation of angiotensin levels in blood (GO:0002002)	6/12	1.375749e-10	7.020445e-07	0	0	67.11409	1523.9499
+angiotensin maturation (GO:0002003)	5/11	9.559691e-09	2.439155e-05	0	0	61.01281	1126.6449
+regulation of cardiac conduction (GO:1903779)	7/67	6.615481e-07	1.125293e-03	0	0	14.02384	 199.5408
+regulation of blood vessel diameter (GO:0097746)	5/27	1.517455e-06	1.935894e-03	0	0	24.85707	 333.0469
+regulation of vasoconstriction (GO:0019229)	5/29	2.205576e-06	2.251011e-03	0	0	23.14279	 301.4238
+regulation of ventricular cardiac muscle cell membrane repolarization (GO:0060307)	4/14	2.794370e-06	2.376611e-03	0	0	38.35091	 490.4278
+organelle transport along microtubule (GO:0072384)	5/31	3.118041e-06	2.273052e-03	0	0	21.64971	 274.4816
+ventricular cardiac muscle cell action potential (GO:0086005)	4/15	3.788457e-06	2.416562e-03	0	0	35.79418	 446.8385
+positive regulation of potassium ion transport (GO:0043268)	4/15	3.788457e-06	2.148055e-03	0	0	35.79418	 446.8385
+neurotrophin signaling pathway (GO:0038179)	4/17	6.529317e-06	3.331910e-03	0	0	31.58310	 377.0772
+
+
+KEGG_2019_Human
+Renin-angiotensin system	7/23	2.451728e-10	7.551322e-08	0	0	40.852057	904.01754
+Neuroactive ligand-receptor interaction	13/338	1.547589e-06	2.383286e-04	0	0	 5.162623	 69.06976
+Renin secretion	6/69	1.258691e-05	1.292256e-03	0	0	11.672016	131.69365
+Apelin signaling pathway	7/137	7.582056e-05	5.838183e-03	0	0	 6.858375	 65.06637
+Prion diseases	4/35	1.294264e-04	7.972669e-03	0	0	15.340364	137.33304
+Cushing syndrome	7/155	1.639597e-04	8.416600e-03	0	0	 6.061918	 52.83501
+cAMP signaling pathway	8/212	1.936769e-04	8.521784e-03	0	0	 5.065215	 43.30414
+MAPK signaling pathway	9/295	3.766191e-04	1.449984e-02	0	0	 4.095097	 32.28688
+Calcium signaling pathway	7/188	5.293565e-04	1.811575e-02	0	0	 4.997858	 37.70308
+Morphine addiction	5/91	5.963727e-04	1.836828e-02	0	0	 7.375175	 54.75806
+
+
